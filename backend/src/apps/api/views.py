@@ -21,7 +21,8 @@ class IntakeViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         card_id = self.request.query_params.get('card_id', None)
         if card_id is not None:
-            queryset = Intake.objects.filter(client_id=card_id)
+            queryset = Intake.objects.filter(
+                client_id=card_id).order_by('-id')[:1]
         return queryset
 
 # View Set del costo implementado para el cobro de agua

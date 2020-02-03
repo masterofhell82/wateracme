@@ -16,6 +16,7 @@ class ClientList extends React.Component {
       });
     });
   }
+
   render() {
     return (
       <div>

@@ -7,9 +7,7 @@ import SearchForm from "../components/FormSearchClient";
 
 class ClientDetail extends React.Component {
   state = {
-    cost: {},
-    client: {},
-    last_inteke: {}
+    client: {}
   };
 
   componentDidMount() {
@@ -18,13 +16,6 @@ class ClientDetail extends React.Component {
       this.setState({
         client: res.data
       });
-    });
-
-    axios.get("http://127.0.0.1:8000/api/cost/").then(res => {
-      this.setState({
-        cost: res.data
-      });
-      console.log(this.state.cost);
     });
   }
 
@@ -39,10 +30,12 @@ class ClientDetail extends React.Component {
         <Card title="Facturar">
           <strong>
             Nombres: {this.state.client.last_names}, {this.state.client.names}{" "}
+            <br />
+            Cliente: {this.state.client.card_id}
           </strong>
           <br />
           <div>
-            <IntakeForm data={this.state.client}></IntakeForm>
+            <IntakeForm data={this.state.client.card_id}></IntakeForm>
           </div>
         </Card>
       </div>
