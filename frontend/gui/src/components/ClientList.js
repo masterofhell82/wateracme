@@ -15,7 +15,7 @@ const columns = [
     key: "x",
     render: item => (
       <span>
-        <a href={`/clients/${item.id}`}>Facturar</a>
+        <a href={`/clients/${item.id}/${item.card_id}`}>Facturar</a>
         <Divider type="vertical" />
         <a href={`/intake/${item.card_id}`}>Deudas</a>
         <Divider type="vertical" />

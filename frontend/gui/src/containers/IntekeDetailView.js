@@ -13,7 +13,7 @@ class IntekeDetail extends React.Component {
   componentDidMount() {
     const cardID = this.props.match.params.cardID;
     axios
-      .get(`http://127.0.0.1:8000/api/intake/?card_id=${cardID}`)
+      .get(`http://127.0.0.1:8000/api/intake/?client_id=${cardID}`)
       .then(res => {
         this.setState({
           last_intake: res.data

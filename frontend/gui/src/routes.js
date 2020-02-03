@@ -7,7 +7,7 @@ import IntekeDetail from "./containers/IntekeDetailView";
 const BaseRouter = () => (
   <div>
     <Route exact path="/" component={ClientList}></Route>
-    <Route exact path="/clients/:clientID" component={ClientDetail}></Route>
+    <Route exact path="/clients/:clientID/:cardId" component={ClientDetail}></Route>
     <Route exact path="/invoice" component={ClientDetail}></Route>
     <Route exact path="/invoice/:clientID" component={ClientDetail}></Route>
     <Route exact path="/intake/:cardID" component={IntekeDetail}></Route>

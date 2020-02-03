@@ -5,13 +5,15 @@ import { Form, Input, Button } from "antd";
 
 class IntakeForm extends React.Component {
  
+  constructor(props){
+    super(props)
+    this.state = {
+      clientId: 0,
+      cost: {},
+      amount: { price: 0, intake: 0 }
+    };
+  }
 
-  state = {
-    clientId: 0,
-    lastIntake: {measure : 0},
-    cost: {},
-    amount: { price: 0, intake: 0 }
-  };
 
   componentWillReceiveProps(props){
     this.setState({
@@ -25,25 +27,17 @@ class IntakeForm extends React.Component {
         cost: res.data
       });
     });
-    const clientID = this.state.clientId;
-    axios.get(`http://127.0.0.1:8000/api/intake/?card_id=${clientID}`).then(res => {
-      this.setState({
-        lastIntake:{
-          measure: res.data[0].measure 
-        } 
-      });
-    });
   }
 
-  handleNumberChange = (e) => {
+  handleNumberChange = (e, lastMeasure) => {
     let amount = 0.0;
     let intake = 0;
-    let last_measure = this.state.lastIntake.measure;
+    
     // Se Comprenden que los valores deben ser enteros
     const newMeasure = parseInt(e.target.value || 0, 10);
 
-    if (newMeasure > last_measure) {
-      intake = newMeasure - last_measure;
+    if (newMeasure > lastMeasure) {
+      intake = newMeasure - lastMeasure;
       amount = intake * parseFloat(this.state.cost[1].tariff);
     } else {
       amount = parseFloat(this.state.cost[0].tariff);
@@ -63,13 +57,12 @@ class IntakeForm extends React.Component {
 
   //
   render() {
-    const user = this.props.data;
-
+    const lastMeasure = this.props.data;
     return (
       <div>
         <Form layout="inline">
           <Form.Item>
-            <strong> Medición Anterior = </strong> {this.state.lastIntake.measure}
+            <strong> Medición Anterior = </strong> {lastMeasure}
           </Form.Item>
           <Form.Item label="Medicion">
             <Input
@@ -77,7 +70,7 @@ class IntakeForm extends React.Component {
               name="newMeasure"
               type="number"
               required
-              onChange={this.handleNumberChange}
+              onChange={event => this.handleNumberChange(event, lastMeasure)}
             />
           </Form.Item>
           <Form.Item label="Consumo="> {this.state.amount.intake} m3</Form.Item>

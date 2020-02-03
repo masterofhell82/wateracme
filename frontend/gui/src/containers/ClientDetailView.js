@@ -7,6 +7,7 @@ import SearchForm from "../components/FormSearchClient";
 
 class ClientDetail extends React.Component {
   state = {
+    lastIntake: {measure : 0},
     client: {}
   };
 
@@ -17,6 +18,18 @@ class ClientDetail extends React.Component {
         client: res.data
       });
     });
+    const clientId = this.props.match.params.cardId;
+    axios.get(`http://127.0.0.1:8000/api/intake/?card_id=${clientId}`).then(res => {
+      this.setState({
+        lastIntake:{
+          measure: res.data[0].measure 
+        } 
+      });
+    }).catch(error => this.setState({
+        lastIntake:{
+          measure: 0
+        } 
+      }));
   }
 
   render() {
@@ -35,7 +48,7 @@ class ClientDetail extends React.Component {
           </strong>
           <br />
           <div>
-            <IntakeForm data={this.state.client.card_id}></IntakeForm>
+            <IntakeForm data={this.state.lastIntake.measure}></IntakeForm>
           </div>
         </Card>
       </div>
