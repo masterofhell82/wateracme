@@ -55,20 +55,21 @@ class IntakeForm extends React.Component {
 
     let dataIntake = {
       client_id: clientID,
-      period: moment().format("DD-MM-YYYY"),
+      period: moment().format("YYYY-MM-DD"),
       measure: e.target.elements.newMeasure.value,
       intake: this.state.amount.intake,
+      amount: this.state.amount.price,
       is_paid:
         e.target.elements.paid.value == this.state.amount.price ? true : false,
-      date_create: moment().format("DD-MM-YYYY hh:mm:ss"),
-      date_update: moment().format("DD-MM-YYYY hh:mm:ss")
+      date_create: moment().format("YYYY-MM-DD hh:mm:ss"),
+      date_update: moment().format("YYYY-MM-DD hh:mm:ss")
     };
 
-    console.log(dataIntake);
     //Se realiza el envio de la data a la base de datos.
-    // axios.put("http://127.0.0.1:8080/api/intake/", data)
-    //   .then(res => console.log(res))
-    //   .catch(error => console.log(error));
+    axios
+      .post("http://127.0.0.1:8000/api/intake/", dataIntake)
+      .then(res => console.log(res))
+      .catch(error => console.log(error));
   };
 
   //
