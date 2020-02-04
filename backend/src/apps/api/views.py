@@ -16,16 +16,17 @@ class ClientViewSet(viewsets.ModelViewSet):
 # View Set de los consumos hecho por el cliente
 class IntakeViewSet(viewsets.ModelViewSet):
     serializer_class = IntakeSerializers
-    queryset = Intake.objects.all()
 
     def get_queryset(self):
         client_id = self.request.query_params.get('client_id', None)
         card_id = self.request.query_params.get('card_id', None)
         if client_id is not None:
             queryset = Intake.objects.filter(client_id=client_id)
-        if card_id is not None:
+        elif card_id is not None:
             queryset = Intake.objects.filter(
                 client_id=card_id).order_by('-id')[:1]
+        else:
+            queryset = Intake.objects.all()
         return queryset
 
 # View Set del costo implementado para el cobro de agua
