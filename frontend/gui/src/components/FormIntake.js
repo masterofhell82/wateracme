@@ -1,8 +1,7 @@
 import React from "react";
 import axios from "axios";
 import moment from "moment";
-
-import { Form, Input, Button } from "antd";
+import { Modal, Form, Input, Button } from "antd";
 
 class IntakeForm extends React.Component {
   constructor(props) {
@@ -12,12 +11,6 @@ class IntakeForm extends React.Component {
       cost: {},
       amount: { price: 0, intake: 0 }
     };
-  }
-
-  componentWillReceiveProps(props) {
-    this.setState({
-      clientId: eval(props.data)
-    });
   }
 
   componentDidMount() {
@@ -50,8 +43,9 @@ class IntakeForm extends React.Component {
     });
   };
 
-  handleFormSubmit = (e, clientID) => {
+  handleFormSubmit = (e, clientID, props) => {
     e.preventDefault();
+    const { confirm } = Modal;
 
     let dataIntake = {
       client_id: clientID,
@@ -59,8 +53,7 @@ class IntakeForm extends React.Component {
       measure: e.target.elements.newMeasure.value,
       intake: this.state.amount.intake,
       amount: this.state.amount.price,
-      is_paid:
-        e.target.elements.paid.value == this.state.amount.price ? true : false,
+      is_paid: false,
       date_create: moment().format("YYYY-MM-DD hh:mm:ss"),
       date_update: moment().format("YYYY-MM-DD hh:mm:ss")
     };
@@ -68,7 +61,20 @@ class IntakeForm extends React.Component {
     //Se realiza el envio de la data a la base de datos.
     axios
       .post("http://127.0.0.1:8000/api/intake/", dataIntake)
-      .then(res => console.log(res))
+      .then(res => {
+        confirm({
+          title: "Muy Bien",
+          content: "Registro realizado satisfactoriamente",
+          onOk() {
+            return new Promise((resolve, reject) => {
+              setTimeout(() => {
+                props.history.push("/");
+              }, 2000);
+            }).catch(() => console.log("Oops errors!"));
+          },
+          onCancel() {}
+        });
+      })
       .catch(error => console.log(error));
   };
 
@@ -79,7 +85,9 @@ class IntakeForm extends React.Component {
       <div>
         <Form
           layout="inline"
-          onSubmit={event => this.handleFormSubmit(event, intake.cardId)}
+          onSubmit={event =>
+            this.handleFormSubmit(event, intake.cardId, intake.props)
+          }
         >
           <Form.Item>
             <strong> Medición Anterior = </strong> {intake.measure}
@@ -95,9 +103,6 @@ class IntakeForm extends React.Component {
           </Form.Item>
           <Form.Item label="Consumo="> {this.state.amount.intake} m3</Form.Item>
           <Form.Item label="Monto="> $ {this.state.amount.price} </Form.Item>
-          <Form.Item label="Pago">
-            <Input type="number" name="paid" type="number" required />
-          </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">
               Guardar

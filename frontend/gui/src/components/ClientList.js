@@ -5,14 +5,13 @@ import { Table, Divider } from "antd";
 
 const columns = [
   { title: "#", dataIndex: "id", key: "id" },
-  { title: "Nombres", dataIndex: "names", key: "name" },
+  { title: "Cedula", dataIndex: "card_id", key: "card_id" },
+  { title: "Nombres", dataIndex: "names", key: "names" },
   { title: "Apellidos", dataIndex: "last_names", key: "lastnames" },
   { title: "Dirección", dataIndex: "address", key: "address" },
   { title: "Teléfono", dataIndex: "phone", key: "phone" },
   {
     title: "Acción",
-    dataIndex: "",
-    key: "x",
     render: item => (
       <span>
         <a href={`/clients/${item.id}/${item.card_id}`}>Facturar</a>
@@ -28,7 +27,7 @@ const columns = [
 const Clients = prosp => {
   return (
     <Table
-      rowKey={record => record.uid}
+      rowKey={record => prosp.data.id}
       columns={columns}
       dataSource={prosp.data}
     />

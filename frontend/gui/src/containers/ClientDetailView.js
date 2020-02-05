@@ -40,7 +40,8 @@ class ClientDetail extends React.Component {
   render() {
     let obj = {
       measure: this.state.lastIntake.measure,
-      cardId: this.state.client.card_id
+      cardId: this.state.client.card_id,
+      props: this.props
     };
     return (
       <div>
